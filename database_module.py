@@ -12,9 +12,9 @@ class DataBase:
         try:
             self.cursor.execute(accion)
             self.conn.commit()
-            return {'msj':'DB correctly'}
+            return {'message':'DB correctly'}
         except:
-            return {'msj':'DB error'}
+            return {'message':'DB error'}
 
     #Is the connection to the database for read information
     def datasearch(self,accion:str):
@@ -24,4 +24,4 @@ class DataBase:
             self.dates = self.cursor.fetchall()
             return self.dates
         except:
-            return {'msj':'DB error'}
+            return {'messaje':'DB error'}
