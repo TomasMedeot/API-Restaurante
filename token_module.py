@@ -7,11 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def generate_token(email):
+def generate_token(email, username):
     payload = {
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
         'iat': datetime.datetime.utcnow(),
-        'sub': email
+        'sub': email,
+        'username': username
     }
     token = jwt.encode(payload, os.getenv("KEY") , algorithm='HS256')
     return token

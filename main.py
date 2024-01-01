@@ -30,11 +30,12 @@ def login():
     password = request.authorization.password
 
     if users.validate_email_address(email):
-        data = database.datasearch(querys.look_user(email))[0]
-        print(data)
-        if users.verify_password(password, data[2]):
-            token = token_module.generate_token(email)
-            return jsonify({'token': token})
+        data = database.datasearch(querys.look_user(email))
+        if len(data) == 1:
+            fdata = users.format(data)
+            if users.verify_password(password, fdata['HASHED PASSWORD']):
+                token = token_module.generate_token(email,fdata['USERNAME'])
+                return jsonify({'token': token})
 
     return jsonify({'message': 'Authentication failed'}), 401
 
@@ -48,9 +49,9 @@ def register():
 
     if users.validate_email_address(email):
         hashed_password = users.hash_password(password)
-        return jsonify(database.datainsert(querys.create_user(username,hashed_password,email)))
+        return jsonify(database.datainsert(querys.create_user(username,hashed_password,email))), 200
     else:
-        return jsonify({'message': 'invalid email'})
+        return jsonify({'message': 'invalid email'}), 401
 
 if __name__ == "__main__":
-    app.run(debug=os.getenv("DEBUG"))
+    app.run(host=os.getenv("HOST") ,port=os.getenv("PORT") ,debug=os.getenv("DEBUG"))
