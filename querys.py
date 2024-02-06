@@ -16,6 +16,9 @@ def add_association(category_id:int, menu_id:int):
 def read_menu():
     return f"SELECT * FROM MENU;"
 
+def read_dish(menu_id:int):
+    return f"SELECT * FROM MENU WHERE MENU_ID = {menu_id};"
+
 def read_category():
     return f"SELECT * FROM CATEGORY;"
 
@@ -32,7 +35,7 @@ def delete_menu(menu_id:int):
     return f"DELETE FROM MENU WHERE MENU_ID = {menu_id};"
 
 def delete_category(category_id:int):
-    return f"START TRANSACTION; DELETE FROM MENU_CATEGORY WHERE CATEGORY_ID = {category_id}; DELETE FROM CATEGORY WHERE CATEGORY_ID = {category_id}; COMMIT;"
+    return [f"DELETE FROM MENU_CATEGORY WHERE CATEGORY_ID = {category_id};", f"DELETE FROM CATEGORY WHERE CATEGORY_ID = {category_id};"]
 
-def delete_association(menu_id:int):
-    return f"DELETE FROM MENU_CATEGORY WHERE MENU_ID = {menu_id};"
+def delete_association(category_id:int, menu_id:int):
+    return f"DELETE FROM MENU_CATEGORY WHERE MENU_ID = {menu_id} AND CATEGORY_ID = {category_id};"
